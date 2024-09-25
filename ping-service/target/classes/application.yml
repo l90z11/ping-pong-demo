@@ -1,7 +1,0 @@
-server:
-  port: 8081
-
-logging:
-  level:
-    root: info
-  file: logs/ping-service-application.log
