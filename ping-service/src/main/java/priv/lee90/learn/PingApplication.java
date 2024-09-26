@@ -3,7 +3,7 @@ package priv.lee90.learn;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import priv.lee90.learn.service.RequestPongTimer;
+import priv.lee90.learn.task.RequestPongTimer;
 
 import java.util.concurrent.ExecutionException;
 

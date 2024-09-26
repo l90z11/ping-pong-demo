@@ -1,5 +1,8 @@
 package priv.lee90.learn.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
@@ -14,6 +17,8 @@ import java.nio.file.StandardOpenOption;
  * @author lee90
  */
 public class FileLockRateLimiter {
+
+    private final Logger logger = LoggerFactory.getLogger(FileLockRateLimiter.class);
 
     private final String lockFilePath;
     private final String stateFilePath;
@@ -31,7 +36,7 @@ public class FileLockRateLimiter {
                 Files.write(path, "0,0".getBytes(), StandardOpenOption.CREATE);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error creating state file", e);
         }
     }
 
@@ -72,7 +77,7 @@ public class FileLockRateLimiter {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error acquiring lock", e);
         }
         return false;
     }

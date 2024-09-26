@@ -6,7 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import spock.lang.Specification
+import spock.lang.Title
 
+@Title("HelloController Test")
 @ExtendWith(SpringExtension)
 @WebFluxTest(HelloController)
 class HelloControllerTest extends Specification {
