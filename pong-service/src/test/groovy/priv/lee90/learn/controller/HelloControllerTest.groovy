@@ -26,4 +26,17 @@ class HelloControllerTest extends Specification {
         response.expectStatus().isOk()
         response.expectBody(String).isEqualTo("World")
     }
+
+    def "hello endpoint response status 429"() {
+        when:
+        def resp = webTestClient.get()
+                .uri("/hello")
+                .exchange()
+        def response = webTestClient.get()
+                .uri("/hello")
+                .exchange()
+
+        then:
+        response.expectStatus().is4xxClientError()
+    }
 }

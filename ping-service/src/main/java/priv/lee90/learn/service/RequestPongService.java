@@ -32,25 +32,24 @@ public class RequestPongService {
 
     public void requestPong() {
         FileLockRateLimiter rateLimiter = new FileLockRateLimiter(lockFilePath, stateFilePath, 2);
-        if (!rateLimiter.tryAcquire()) {
+        if (rateLimiter.tryAcquire()) {
+            WebClient.ResponseSpec responseSpec = webClient.get().retrieve();
+            Mono<ResponseEntity<String>> responseBody = responseSpec
+                    .onStatus(HttpStatus::is4xxClientError, response -> {
+                        if (response.statusCode().equals(HttpStatus.TOO_MANY_REQUESTS)) {
+                            logger.info("Request not send as being \"rate limited\"");
+                        }
+                        return Mono.error(new RuntimeException(response.statusCode().value() + " : " + response.statusCode().getReasonPhrase()));
+                    })
+                    .toEntity(String.class)
+                    .onErrorReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+            HttpStatus statusCode = responseBody.block().getStatusCode();
+
+            if (HttpStatus.OK.equals(statusCode)) {
+                logger.info("Request sent & Pong Respond");
+            }
+        } else {
             logger.info("Request not send as being \"rate limited\"");
-            return;
-        }
-
-        WebClient.ResponseSpec responseSpec = webClient.get().retrieve();
-        Mono<ResponseEntity<String>> responseBody = responseSpec
-                .onStatus(HttpStatus::is4xxClientError, response -> {
-                    if (response.statusCode().equals(HttpStatus.TOO_MANY_REQUESTS)) {
-                        logger.info("Request not send as being \"rate limited\"");
-                    }
-                    return Mono.error(new RuntimeException(response.statusCode().value() + " : " + response.statusCode().getReasonPhrase()));
-                })
-                .toEntity(String.class)
-                .onErrorReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-        HttpStatus statusCode = responseBody.block().getStatusCode();
-
-        if (HttpStatus.OK.equals(statusCode)) {
-            logger.info("Request sent & Pong Respond");
         }
 
     }

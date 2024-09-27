@@ -37,6 +37,7 @@ class RequestPongTimerTest extends Specification {
     def "test hello Pong"() {
         when:
         requestPongTimer.helloPong()
+        sleep(2000)
 
         then:
         noExceptionThrown()
