@@ -10,10 +10,10 @@
 > 本地先启动1个pong-service服务，再启动3个或以上ping-service服务。操作顺序如下：  
 > 1、在项目根目录执行：mvn clean compile  
 > 2、启动服务，具体启动命令如下：  
-> java -jar pong-service.jar -server.port=8082  
-> java -jar ping-service.jar -server.port=8083   
-> java -jar ping-service.jar -server.port=8084   
-> java -jar ping-service.jar -server.port=8085
+> java -jar pong-service.jar -server.port=8080  
+> java -jar ping-service.jar -server.port=8081   
+> java -jar ping-service.jar -server.port=8082   
+> java -jar ping-service.jar -server.port=8083
 
 ## 测试说明
 > 在项目的根目录执行：mvn clean test  
