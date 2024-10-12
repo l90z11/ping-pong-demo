@@ -2,20 +2,16 @@ package priv.lee90.learn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-import priv.lee90.learn.task.RequestPongTimer;
-
-import java.util.concurrent.ExecutionException;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author Ethan Lee
  * ping service
  */
 @SpringBootApplication
+@EnableScheduling
 public class PingApplication {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(PingApplication.class, args);
-        RequestPongTimer requestPongTimer = applicationContext.getBean(RequestPongTimer.class);
-        requestPongTimer.helloPong();
+    public static void main(String[] args) {
+        SpringApplication.run(PingApplication.class, args);
     }
 }

@@ -18,7 +18,9 @@ class FileLockRateLimiterTest extends Specification {
 
     def "test try Acquire"() {
         when:
-        fileLockRateLimiter = new FileLockRateLimiter("ping.lock", "pingLockState.txt", 1)
+        sleep(800)
+        def seconds = System.currentTimeSeconds()
+        fileLockRateLimiter = new FileLockRateLimiter(seconds + "ping.lock", seconds + "pingLockState.txt", 1)
         def result1 = fileLockRateLimiter.tryAcquire()
         def result2 = fileLockRateLimiter.tryAcquire()
 

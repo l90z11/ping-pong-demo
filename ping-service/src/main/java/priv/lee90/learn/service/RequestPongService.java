@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import priv.lee90.learn.util.FileLockRateLimiter;
@@ -30,6 +31,10 @@ public class RequestPongService {
         this.stateFilePath = stateFilePath;
     }
 
+    /**
+     * 1秒执行一次
+     */
+    @Scheduled(fixedRate = 1000)
     public void requestPong() {
         FileLockRateLimiter rateLimiter = new FileLockRateLimiter(lockFilePath, stateFilePath, 2);
         if (rateLimiter.tryAcquire()) {
@@ -37,7 +42,7 @@ public class RequestPongService {
             Mono<ResponseEntity<String>> responseBody = responseSpec
                     .onStatus(HttpStatus::is4xxClientError, response -> {
                         if (response.statusCode().equals(HttpStatus.TOO_MANY_REQUESTS)) {
-                            logger.info("Request not send as being \"rate limited\"");
+                            logger.info("Reouest send &, Pong throttled it.");
                         }
                         return Mono.error(new RuntimeException(response.statusCode().value() + " : " + response.statusCode().getReasonPhrase()));
                     })
